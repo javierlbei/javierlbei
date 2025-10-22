@@ -34,8 +34,8 @@ jobs:
         id: issue
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_NUMBER: ${{ github.events.issue.number }}
-          ISSUE_TITLE: ${{ github.events.issue.title }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
         
         run: |
           issueId = "$(gh project item-list 1 --owner "javierlbei" --format json --jq '.items[] | select(.content.number == $ISSUE_NUMBER and .content.title == $ISSUE_TITLE) | .id')"
