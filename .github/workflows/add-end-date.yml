@@ -21,6 +21,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
       
-      - name: Run a multi-line script
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      
+      - name: Change end date in project
+        env:
+          ISSUE_ID: ${{ github.event.issue.id }}
+          FIELD_ID: 231893718
+          PROJECT_ID: 1
+          CURRENT_DATE: ${{ steps.date.outputs.date }}
+          
         run: |
-          echo ${{ github.event.issue.id }}
+          gh project item-edit --id $ISSUE_ID --field-id $FIELD_ID --project-id $PROJECT_ID --text $CURRENT_DATE
