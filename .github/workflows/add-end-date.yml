@@ -27,8 +27,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
         run: |
-          projectId = gh project list --format json --jq '.projects[] | select(.number == 1) | .id' 
-          echo "::set-output name=id::$(projectId)"
+          projectId = $(gh project list --format json --jq '.projects[] | select(.number == 1) | .id' )
+          echo "id = $projectId" >> $GITHUB_ENV
       
       - name: Get issue id
         id: issue
@@ -38,8 +38,8 @@ jobs:
           ISSUE_TITLE: ${{ github.events.issue.title }}
         
         run: |
-          projectId = gh project item-list 1 --owner "javierlbei" --format json --jq '.items[] | select(.content.number == $ISSUE_NUMBER and .content.title == $ISSUE_TITLE) | .id' 
-          echo "::set-output name=id::$(projectId)"
+          issueId = $(gh project item-list 1 --owner "javierlbei" --format json --jq '.items[] | select(.content.number == $ISSUE_NUMBER and .content.title == $ISSUE_TITLE) | .id')
+          echo "id = $issueId" >> $GITHUB_ENV
       
       - name: Get field id
         id: field
@@ -47,12 +47,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
         run: |
-          fieldId = gh project field-list 1 --owner "javierlbei" --format json --jq '.fields[] | select(.name == "End date") | .id' 
-          echo "::set-output name=id::$(fieldId)"
+          fieldId = $(gh project field-list 1 --owner "javierlbei" --format json --jq '.fields[] | select(.name == "End date") | .id' )
+          echo "id = $fieldId" >> $GITHUB_ENV
       
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        run: echo "id = $(date +'%Y-%m-%d')" >> $GITHUB_ENV
       
       - name: Change end date in project
         env:
