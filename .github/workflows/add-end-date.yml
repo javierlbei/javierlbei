@@ -38,7 +38,7 @@ jobs:
           ISSUE_TITLE: ${{ github.event.issue.title }}
         
         run: |
-          issueId="$(gh project item-list 1 --owner "javierlbei" --format json --jq '.items[] | select(.content.number == $ISSUE_NUMBER and .content.title == $ISSUE_TITLE) | .id')"
+          issueId="$(gh project item-list 1 --owner 'javierlbei' --format json --jq '.items[] | select(.content.number == $ISSUE_NUMBER and .content.title == \"$ISSUE_TITLE\") | .id')"
           echo 'id='$issueId >> $GITHUB_ENV
       
       - name: Get field id
