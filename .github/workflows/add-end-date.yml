@@ -21,10 +21,17 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
       
+      - name: Generate token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PEM }}
+      
       - name: Get project id
         id: project
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         
         run: |
           projectId="$(gh project list --format json --jq '.projects[] | select(.number == 1) | .id')"
@@ -33,7 +40,7 @@ jobs:
       - name: Get issue id
         id: issue
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
         
@@ -44,7 +51,7 @@ jobs:
       - name: Get field id
         id: field
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         
         run: |
           fieldId="$(gh project field-list 1 --owner "javierlbei" --format json --jq '.fields[] | select(.name == "End date") | .id' )"
@@ -56,7 +63,7 @@ jobs:
       
       - name: Change end date in project
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           PROJECT_ID: ${{ steps.project.outputs.id }}
           ISSUE_ID: ${{ steps.issue.outputs.id }}
           FIELD_ID: ${{ steps.field.outputs.id }}
