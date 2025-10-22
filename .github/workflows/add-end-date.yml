@@ -30,7 +30,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_ID: ${{ github.event.issue.id }}
           FIELD_ID: 231893718
-          PROJECT_ID: 1
+          PROJECT_ID: 18392284
           CURRENT_DATE: ${{ steps.date.outputs.date }}
           
         run: |
