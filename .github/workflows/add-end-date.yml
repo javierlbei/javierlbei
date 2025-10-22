@@ -27,7 +27,7 @@ jobs:
       
       - name: Change end date in project
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_ID: ${{ github.event.issue.id }}
           FIELD_ID: 231893718
           PROJECT_ID: 1
